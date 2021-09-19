@@ -1,0 +1,32 @@
+.login_title {
+  margin-top: 100px;
+  margin-left: 150px;
+}
+
+.login_input {
+  max-width: 350px;
+}
+
+.btn_style {
+  font-size: 15px;
+  border-radius: 20px;
+}
+
+@media (max-width: 600px) {
+  .container {
+    background-color: rebeccapurple;
+  }
+
+  .login_title {
+    margin-left: 150px;
+  }
+
+  .login_label {
+    display: block;
+    margin-left: 150px;
+  }
+
+  .login_input {
+    max-width: 350px;
+  }
+}
