@@ -1,6 +1,6 @@
 // import Head from 'next/head'
 import "antd/dist/antd.css";
-import LoginForm from "../components/Login/LoginForm";
+import LoginForm from "../components/login/LoginForm";
 import styles from "../styles/Home.module.scss";
 
 export default function Home() {
