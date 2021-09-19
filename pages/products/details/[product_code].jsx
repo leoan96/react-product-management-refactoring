@@ -1,5 +1,6 @@
 import { useRouter } from "next/dist/client/router";
 import React from "react";
+import EditProduct from "../../../components/products/EditProduct";
 
 const ProductDetailsPage = () => {
   const { query } = useRouter();
@@ -8,7 +9,7 @@ const ProductDetailsPage = () => {
     <div>
       <h1>Details Page</h1>
       <p>Product Code: {query.product_code}</p>
-      {/* <EditProduct productCode={router.query.product_code} /> */}
+      <EditProduct productCode={router.query.product_code} />
     </div>
   );
 };
