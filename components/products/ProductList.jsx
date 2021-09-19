@@ -1,5 +1,5 @@
 import React from "react";
-import Link from "next/link";
+import ProductItem from "./ProductItem";
 
 const ProductList = ({ products }) => {
   return (
@@ -8,11 +8,7 @@ const ProductList = ({ products }) => {
         <p>List of All Products</p>
         <ul>
           {products.map((product) => (
-            <li key={product.product_code}>
-              <Link href={`/products/details/${product.product_code}`}>
-                <a>{product.product_name}</a>
-              </Link>
-            </li>
+            <ProductItem key={product.product_code} product={product} />
           ))}
         </ul>
       </div>
