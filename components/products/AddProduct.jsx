@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Form, Input, DatePicker, Select, Button } from "antd";
 import FormModal from "../form/FormModal";
+import { enviroment } from "../../constants";
 
 const AddProduct = () => {
   const form = useRef();
@@ -32,15 +33,6 @@ const AddProduct = () => {
   };
 
   async function finishHandler(values) {
-    let products;
-    const backendBaseUrl = "http://localhost:3001";
-    try {
-      const response = await fetch(backendBaseUrl);
-      products = await response.json();
-    } catch (err) {
-      console.log(err);
-    }
-
     const { product_code, product_name, product_type } = values;
     const newProduct = {
       product_code,
@@ -50,7 +42,7 @@ const AddProduct = () => {
     };
 
     try {
-      await fetch(backendBaseUrl, {
+      await fetch(enviroment.PRODUCT_SERVICE.baseUrl, {
         method: "POST",
         headers: {
           Accept: "application/json",
