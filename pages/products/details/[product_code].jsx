@@ -8,8 +8,7 @@ const ProductDetailsPage = () => {
   return (
     <div>
       <h1>Details Page</h1>
-      <p>Product Code: {query.product_code}</p>
-      <EditProduct productCode={router.query.product_code} />
+      <EditProduct productCode={query.product_code} />
     </div>
   );
 };
