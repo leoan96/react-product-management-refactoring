@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Form, Input, DatePicker, Select, Button } from "antd";
 import FormModal from "../form/FormModal";
+import CustomHead from "../CustomHead";
 
 const EditProduct = (props) => {
   const [productCode, setProductCode] = useState(props.productCode);
@@ -76,6 +77,7 @@ const EditProduct = (props) => {
 
   return (
     <div>
+      <CustomHead title={`Product: ${productName}`} />
       <FormModal
         isModalVisible={isModalVisible}
         handleOk={handleOk}
