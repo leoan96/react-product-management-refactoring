@@ -1,11 +1,12 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { Form, Input, DatePicker, Select, Button } from "antd";
 import FormModal from "../form/FormModal";
 import { enviroment } from "../../constants";
+import { ProductContext } from "../store/ProductContext";
 
 const AddProduct = () => {
   const form = useRef();
-
+  const productContext = useContext(ProductContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   function handleOk() {
@@ -42,14 +43,17 @@ const AddProduct = () => {
     };
 
     try {
-      await fetch(enviroment.PRODUCT_SERVICE.baseUrl, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newProduct),
-      });
+      // await fetch(enviroment.PRODUCT_SERVICE.baseUrl, {
+      //   method: "POST",
+      //   headers: {
+      //     Accept: "application/json",
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(newProduct),
+      // });
+      console.log(productContext.products);
+      productContext.products.concat(newProduct);
+      console.log(productContext.products);
       form.current.resetFields();
       setIsModalVisible(true);
     } catch (err) {

@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Form, Input, DatePicker, Select, Button } from "antd";
 import FormModal from "../form/FormModal";
+import { ProductContext } from "../store/ProductContext";
 
 const EditProduct = (props) => {
   const [productCode, setProductCode] = useState(props.productCode);
@@ -9,17 +10,22 @@ const EditProduct = (props) => {
   const [datePicker, setDatePicker] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
 
+  const productContext = useContext(ProductContext);
+
   function handleOk() {
     setIsModalVisible(false);
   }
 
   useEffect(() => {
     async function getProductDetails() {
-      const response = await fetch(
-        `http://localhost:3001/${props.productCode}`
-      );
-      const products = (await response.json())[0];
-      console.log("Product: ", products);
+      // const response = await fetch(
+      //   `http://localhost:3001/${props.productCode}`
+      // );
+      // const products = (await response.json())[0];
+      const products = productContext.products.filter(
+        (product) => product.product_code === productCode
+      )[0];
+
       setProductName(products.product_name);
       setProductType(products.product_type);
       setDatePicker(products.date);

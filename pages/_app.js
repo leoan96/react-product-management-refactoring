@@ -3,6 +3,7 @@ import "antd/dist/antd.css";
 import { useRouter } from "next/dist/client/router";
 
 import Layout from "../components/layout/Layout";
+import ProductContextProvider from "../components/store/ProductContext";
 
 function MyApp({ Component, pageProps }) {
   const { asPath } = useRouter();
@@ -12,9 +13,11 @@ function MyApp({ Component, pageProps }) {
   }
 
   return (
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
+    <ProductContextProvider>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </ProductContextProvider>
   );
 }
 
