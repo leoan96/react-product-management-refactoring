@@ -2,28 +2,33 @@ import { useState, useEffect } from "react";
 import { Form, Input, DatePicker, Select, Button } from "antd";
 import FormModal from "../form/FormModal";
 import CustomHead from "../CustomHead";
+import moment from "moment";
+import { useRouter } from "next/dist/client/router";
+import { enviroment } from "../../constants";
 
 const EditProduct = (props) => {
-  const [productCode, setProductCode] = useState(props.productCode);
+  const [productCode, setProductCode] = useState("");
   const [productName, setProductName] = useState("");
   const [productType, setProductType] = useState("");
   const [datePicker, setDatePicker] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  function handleOk() {
-    setIsModalVisible(false);
-  }
+  const router = useRouter();
+  const productDetailServiceUrl = `${enviroment.PRODUCT_SERVICE.baseUrl}/${router.query.product_code}`;
 
   useEffect(() => {
     async function getProductDetails() {
-      const response = await fetch(
-        `http://localhost:3001/${props.productCode}`
-      );
-      const products = (await response.json())[0];
-      console.log("Product: ", products);
-      setProductName(products.product_name);
-      setProductType(products.product_type);
-      setDatePicker(products.date);
+      try {
+        const response = await fetch(productDetailServiceUrl);
+        const products = await response.json();
+
+        setProductCode(products.product_code);
+        setProductName(products.product_name);
+        setProductType(products.product_type);
+        setDatePicker(products.date);
+      } catch (err) {
+        console.log(err);
+      }
     }
     getProductDetails();
   });
@@ -48,10 +53,11 @@ const EditProduct = (props) => {
     },
   };
 
-  async function finishHandler(values) {
-    let products;
-    const backendBaseUrl = `http://localhost:3001/${productCode}`;
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
 
+  const finishHandler = async (values) => {
     const { product_code, product_name, product_type } = values;
     const updateProduct = {
       product_code,
@@ -61,7 +67,7 @@ const EditProduct = (props) => {
     };
 
     try {
-      await fetch(backendBaseUrl, {
+      await fetch(productDetailServiceUrl, {
         method: "PUT",
         headers: {
           Accept: "application/json",
@@ -73,7 +79,7 @@ const EditProduct = (props) => {
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   return (
     <div>
@@ -115,7 +121,9 @@ const EditProduct = (props) => {
           label="DatePicker"
           rules={[{ required: true }]}
         >
-          <DatePicker />
+          <DatePicker
+          // defaultValue={moment(datePicker ? datePicker : "2021-09-29")}
+          />
         </Form.Item>
         <Form.Item
           name="product_type"
@@ -131,9 +139,6 @@ const EditProduct = (props) => {
             <Select.Option value="food">Food</Select.Option>
           </Select>
         </Form.Item>
-        {/* <Form.Item name="publish" valuePropName="checked" noStyle>
-          <Checkbox>Published</Checkbox>
-        </Form.Item> */}
         <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
           <Button type="primary" htmlType="submit">
             Edit Product
