@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { Form, Input, DatePicker, Select, Button } from "antd";
 import FormModal from "../form/FormModal";
 import { enviroment } from "../../constants";
+import CustomHead from "../CustomHead";
 
 const AddProduct = () => {
   const form = useRef();
@@ -59,6 +60,7 @@ const AddProduct = () => {
 
   return (
     <div>
+      <CustomHead title="Add Product" />
       <FormModal
         isModalVisible={isModalVisible}
         handleOk={handleOk}
