@@ -1,3 +1,4 @@
 import enviroment from "./environment";
+import { productTypeFilter } from "./product";
 
-export { enviroment };
+export { enviroment, productTypeFilter };
