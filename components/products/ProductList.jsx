@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Table, Tag, Space, Button } from "antd";
-import { productTypeFilter } from "../../constants";
+import { enviroment, productTypeFilter } from "../../constants";
 
 const ProductList = ({ products }) => {
+  const [allProducts, setAllProducts] = useState(products);
   const [filteredInfo, setFilteredInfo] = useState({});
   const [sortedInfo, setSortedInfo] = useState({});
 
   const changeHandler = (pagination, filters, sorter) => {
-    console.log("changeHandler filters: ", filters);
     setFilteredInfo(filters);
     setSortedInfo(sorter);
   };
@@ -27,6 +27,24 @@ const ProductList = ({ products }) => {
   const clearAll = () => {
     setFilteredInfo(null);
     setSortedInfo(null);
+  };
+
+  const deleteHandler = async (product_code) => {
+    try {
+      await fetch(`${enviroment.PRODUCT_SERVICE.baseUrl}/${product_code}`, {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+      const updatedProductList = allProducts.filter(
+        (product) => product.product_code !== product_code
+      );
+      setAllProducts(updatedProductList);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const columns = [
@@ -73,7 +91,9 @@ const ProductList = ({ products }) => {
       render: (text, record) => (
         <Space size="middle">
           <Link href={`/products/details/${record.product_code}`}>Edit</Link>
-          <Link href="#">Delete</Link>
+          <Link href="/admin">
+            <a onClick={() => deleteHandler(record.product_code)}>Delete</a>
+          </Link>
         </Space>
       ),
     },
@@ -90,7 +110,7 @@ const ProductList = ({ products }) => {
         </Space>
         <Table
           columns={columns}
-          dataSource={products}
+          dataSource={allProducts}
           onChange={changeHandler}
         />
       </div>
