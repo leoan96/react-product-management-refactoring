@@ -1,12 +1,10 @@
 import React from "react";
 import ProductList from "../../components/products/ProductList";
 import { enviroment } from "../../constants";
-import CustomHead from "../../components/CustomHead";
 
 const AdminPage = ({ products }) => {
   return (
     <div>
-      <CustomHead title="Products" />
       <h1>Admin Page</h1>
       <ProductList products={products} />
     </div>
