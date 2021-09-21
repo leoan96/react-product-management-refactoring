@@ -7,7 +7,7 @@ import CustomHead from "../components/CustomHead";
 
 const MyApp = ({ Component, pageProps }) => {
   const { asPath } = useRouter();
-  const headTitle = manageHeadTitle(asPath);
+  const headTitle = headTitleManager(asPath);
 
   if (asPath === "/") {
     return (
@@ -28,7 +28,7 @@ const MyApp = ({ Component, pageProps }) => {
 
 export default MyApp;
 
-const manageHeadTitle = (asPath) => {
+const headTitleManager = (asPath) => {
   let head;
   switch (asPath) {
     case "/":
@@ -36,6 +36,9 @@ const manageHeadTitle = (asPath) => {
       break;
     case "/admin":
       head = generateCustomHead("Admin Page");
+      break;
+    case "/products/add-product":
+      head = generateCustomHead("Add Product Page");
       break;
     case asPath.match(/\/products\/details\/.*/gm) && asPath:
       head = generateCustomHead("Product Details");
