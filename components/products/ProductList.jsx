@@ -15,8 +15,8 @@ const ProductList = ({ products }) => {
 
   const setNameSort = () => {
     setSortedInfo({
-      order: "descend",
-      columnKey: "product_name",
+      order: "ascend",
+      columnKey: "productName",
     });
   };
 
@@ -34,6 +34,8 @@ const ProductList = ({ products }) => {
       title: "Product Name",
       dataIndex: "product_name",
       key: "productName",
+      sorter: (a, b) => a.product_name.localeCompare(b.product_name),
+      sortOrder: sortedInfo?.columnKey === "productName" && sortedInfo.order,
       render: (text, record) => (
         <Link href={`/products/details/${record.product_code}`}>{text}</Link>
       ),
@@ -47,6 +49,8 @@ const ProductList = ({ products }) => {
       title: "Date",
       dataIndex: "date",
       key: "datepicker",
+      sorter: (a, b) => a.date.localeCompare(b.date),
+      sortOrder: sortedInfo?.columnKey === "datepicker" && sortedInfo.order,
     },
     {
       title: "Type",
