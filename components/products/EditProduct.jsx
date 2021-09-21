@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Form, Input, DatePicker, Select, Button } from "antd";
 import FormModal from "../form/FormModal";
-import CustomHead from "../CustomHead";
 import moment from "moment";
 import { useRouter } from "next/dist/client/router";
 import { enviroment } from "../../constants";
@@ -83,7 +82,6 @@ const EditProduct = (props) => {
 
   return (
     <div>
-      <CustomHead title={`Product: ${productName}`} />
       <FormModal
         isModalVisible={isModalVisible}
         handleOk={handleOk}
