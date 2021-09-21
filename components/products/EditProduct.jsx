@@ -30,7 +30,13 @@ const EditProduct = (props) => {
       }
     }
     getProductDetails();
-  });
+
+  }, [productDetailServiceUrl]);
+
+  // useEffect(( ) => {
+  //   setproductDetailServiceUrl()
+  // }, [router.query.product_code])
+
 
   const layout = {
     labelCol: {
