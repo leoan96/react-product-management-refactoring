@@ -14,7 +14,6 @@ const LoginForm = () => {
   const onFinishHandler = (values) => {
     const { username, password } = values;
     if (username && password && validateAccount(username, password)) {
-      console.log("Success:", values);
       router.push("/admin");
     }
     console.log("Wrong credentials!");
