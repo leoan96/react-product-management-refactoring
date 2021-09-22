@@ -7,6 +7,7 @@ const AddProduct = () => {
   const form = useRef();
 
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [error, setError] = useState(false);
 
   function handleOk() {
     setIsModalVisible(false);
@@ -54,7 +55,16 @@ const AddProduct = () => {
       setIsModalVisible(true);
     } catch (err) {
       console.log(err);
+      setError(true);
     }
+  }
+
+  if (error) {
+    return (
+      <div>
+        <p>Unable to connect to server. Please try again later</p>
+      </div>
+    );
   }
 
   return (
