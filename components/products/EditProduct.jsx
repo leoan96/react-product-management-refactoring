@@ -11,6 +11,7 @@ const EditProduct = (props) => {
   const [productType, setProductType] = useState("");
   const [datePicker, setDatePicker] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [error, setError] = useState(false);
 
   const router = useRouter();
 
@@ -29,6 +30,7 @@ const EditProduct = (props) => {
         setDatePicker(products.date);
       } catch (err) {
         console.log(err);
+        setError(true);
       }
     }
     getProductDetails();
@@ -79,8 +81,17 @@ const EditProduct = (props) => {
       setIsModalVisible(true);
     } catch (err) {
       console.log(err);
+      setError(true);
     }
   };
+
+  if (error) {
+    return (
+      <div>
+        <p>Unable to connect to server. Please try again later</p>
+      </div>
+    );
+  }
 
   return (
     <div>
