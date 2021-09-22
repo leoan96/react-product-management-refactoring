@@ -112,6 +112,7 @@ const ProductList = ({ products }) => {
           columns={columns}
           dataSource={allProducts}
           onChange={changeHandler}
+          rowKey="product_code"
         />
       </div>
     </div>
