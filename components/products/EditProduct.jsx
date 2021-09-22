@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Error from "next/error";
 import { Form, Input, DatePicker, Select, Button } from "antd";
 import FormModal from "../form/FormModal";
 import moment from "moment";
@@ -12,6 +13,8 @@ const EditProduct = (props) => {
   const [datePicker, setDatePicker] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [error, setError] = useState(false);
+  const [productCodeNotFoundError, setProductCodeNotFoundError] =
+    useState(null);
 
   const router = useRouter();
 
@@ -22,7 +25,15 @@ const EditProduct = (props) => {
         const response = await fetch(
           `${enviroment.PRODUCT_SERVICE.baseUrl}/${router.query.product_code}`
         );
-        const products = await response.json();
+        let products = await response.text();
+
+        if (!products) {
+          setProductCodeNotFoundError(
+            <Error statusCode={400} title="Wrong product code given"></Error>
+          );
+        }
+
+        products = JSON.parse(products);
 
         setProductCode(products.product_code);
         setProductName(products.product_name);
@@ -70,20 +81,43 @@ const EditProduct = (props) => {
     };
 
     try {
-      await fetch(productDetailServiceUrl, {
-        method: "PUT",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updateProduct),
-      });
+      await fetch(
+        `${enviroment.PRODUCT_SERVICE.baseUrl}/${router.query.product_code}`,
+        {
+          method: "PUT",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updateProduct),
+        }
+      );
       setIsModalVisible(true);
     } catch (err) {
       console.log(err);
       setError(true);
     }
   };
+
+  const productNameChangeHandler = (e) => {
+    setProductName(e.target.value);
+  };
+
+  const productCodeChangeHandler = (e) => {
+    setProductCode(e.target.value);
+  };
+
+  const dateChangeHandler = (date, dateString) => {
+    setDatePicker(dateString);
+  };
+
+  const productTypeChangeHandler = (value, option) => {
+    setProductType(value);
+  };
+
+  if (productCodeNotFoundError) {
+    return productCodeNotFoundError;
+  }
 
   if (error) {
     return (
@@ -110,7 +144,7 @@ const EditProduct = (props) => {
           { name: "product_name", value: productName },
           { name: "product_code", value: productCode },
           { name: "product_type", value: productType },
-          // { name: "datePicker", value: datePicker },
+          { name: "datePicker", value: moment(datePicker) },
         ]}
       >
         <Form.Item
@@ -118,30 +152,32 @@ const EditProduct = (props) => {
           label="Name"
           rules={[{ required: true }]}
         >
-          <Input />
+          <Input onChange={productNameChangeHandler} />
         </Form.Item>
         <Form.Item
           name="product_code"
           label="Code"
           rules={[{ required: true }]}
         >
-          <Input />
+          <Input onChange={productCodeChangeHandler} />
         </Form.Item>
         <Form.Item
           name="datePicker"
           label="DatePicker"
           rules={[{ required: true }]}
         >
-          <DatePicker
-          // defaultValue={moment(datePicker ? datePicker : "2021-09-29")}
-          />
+          <DatePicker onChange={dateChangeHandler} />
         </Form.Item>
         <Form.Item
           name="product_type"
           label="Type"
           rules={[{ required: true }]}
         >
-          <Select placeholder="Select product type" allowClear>
+          <Select
+            placeholder="Select product type"
+            allowClear
+            onChange={productTypeChangeHandler}
+          >
             <Select.Option value="apparel">Apparel</Select.Option>
             <Select.Option value="sporting">Sporting</Select.Option>
             <Select.Option value="health">Health</Select.Option>
