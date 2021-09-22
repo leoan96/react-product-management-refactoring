@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Form, Input, DatePicker, Select, Button } from "antd";
 import FormModal from "../form/FormModal";
 import moment from "moment";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import { enviroment } from "../../constants";
 
 const EditProduct = (props) => {
@@ -13,12 +13,14 @@ const EditProduct = (props) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const router = useRouter();
-  const productDetailServiceUrl = `${enviroment.PRODUCT_SERVICE.baseUrl}/${router.query.product_code}`;
 
   useEffect(() => {
     async function getProductDetails() {
+      if (!router.isReady) return;
       try {
-        const response = await fetch(productDetailServiceUrl);
+        const response = await fetch(
+          `${enviroment.PRODUCT_SERVICE.baseUrl}/${router.query.product_code}`
+        );
         const products = await response.json();
 
         setProductCode(products.product_code);
@@ -30,13 +32,7 @@ const EditProduct = (props) => {
       }
     }
     getProductDetails();
-
-  }, [productDetailServiceUrl]);
-
-  // useEffect(( ) => {
-  //   setproductDetailServiceUrl()
-  // }, [router.query.product_code])
-
+  }, [router.isReady, router.query.product_code]);
 
   const layout = {
     labelCol: {
