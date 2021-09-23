@@ -1,6 +1,7 @@
 import React from "react";
 import { Form, Input, Button } from "antd";
 import { useRouter } from "next/dist/client/router";
+import { signIn } from "next-auth/client";
 
 import styles from "./LoginForm.module.scss";
 
@@ -11,10 +12,20 @@ const LoginForm = () => {
     return username === "lizard" && password === "123" ? true : false;
   };
 
-  const onFinishHandler = (values) => {
+  const onFinishHandler = async (values) => {
     const { username, password } = values;
+
+    const result = await signIn("credentials", {
+      redirect: false,
+      username,
+      password,
+    });
+
+    console.log(result);
+
     if (username && password && validateAccount(username, password)) {
       router.push("/admin");
+      return;
     }
     console.log("Wrong credentials!");
   };
@@ -50,8 +61,6 @@ const LoginForm = () => {
             message: "Please input your username!",
           },
           {
-            type: "enum",
-            enum: ["lizard"],
             message: "Wrong username!",
           },
         ]}

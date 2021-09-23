@@ -1,4 +1,4 @@
-import React from "react";
+import { getSession } from "next-auth/client";
 import ProductList from "../../components/products/ProductList";
 import Error from "next/error";
 import { enviroment } from "../../constants";
@@ -23,7 +23,18 @@ const AdminPage = ({ errorCode, products }) => {
 
 export default AdminPage;
 
-export const getServerSideProps = async ({ res }) => {
+export const getServerSideProps = async ({ req, res }) => {
+  const session = await getSession({ req });
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
   let products = [];
   let errorCode = 500;
 
@@ -41,6 +52,6 @@ export const getServerSideProps = async ({ res }) => {
   }
 
   return {
-    props: { errorCode, products }, // will be passed to the page component as props
+    props: { errorCode, session, products }, // will be passed to the page component as props
   };
 };

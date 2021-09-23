@@ -1,16 +1,26 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import { Menu } from "antd";
-import { AppleOutlined, BarcodeOutlined } from "@ant-design/icons";
+import { signOut, useSession } from "next-auth/client";
+import { Menu, Button } from "antd";
+import {
+  AppleOutlined,
+  BarcodeOutlined,
+  LogoutOutlined,
+} from "@ant-design/icons";
 
 import styles from "./MainNavigation.module.scss";
 
 const MainNavigation = () => {
+  // const [session, loading] = useSession();
   const [current, setCurrent] = useState("");
 
-  function menuClickHandler(e) {
+  const menuClickHandler = (e) => {
     setCurrent(e.key);
-  }
+  };
+
+  const logoutHandler = () => {
+    signOut();
+  };
 
   return (
     <div className={styles.header}>
@@ -28,6 +38,14 @@ const MainNavigation = () => {
           <Link href="/products/add-product">
             <a>Add Product</a>
           </Link>
+        </Menu.Item>
+        {/* {session && !loading && (
+          <Menu.Item key="logout" icon={<LogoutOutlined />}>
+            <Button onClick={logoutHandler}>Logout</Button>
+          </Menu.Item>
+        )} */}
+        <Menu.Item key="logout" icon={<LogoutOutlined />}>
+          <Button onClick={logoutHandler}>Logout</Button>
         </Menu.Item>
       </Menu>
     </div>

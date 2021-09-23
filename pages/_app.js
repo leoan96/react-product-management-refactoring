@@ -4,6 +4,7 @@ import { useRouter } from "next/dist/client/router";
 
 import Layout from "../components/layout/Layout";
 import CustomHead from "../components/CustomHead";
+import { Provider } from "next-auth/client";
 
 const MyApp = ({ Component, pageProps }) => {
   const { asPath } = useRouter();
@@ -19,10 +20,12 @@ const MyApp = ({ Component, pageProps }) => {
   }
 
   return (
-    <Layout>
-      {headTitle}
-      <Component {...pageProps} />
-    </Layout>
+    <Provider session={pageProps.session}>
+      <Layout>
+        {headTitle}
+        <Component {...pageProps} />
+      </Layout>
+    </Provider>
   );
 };
 
