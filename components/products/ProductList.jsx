@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import { Table, Tag, Space, Button } from "antd";
+import { Table, Tag, Space, Button, Input } from "antd";
 import { enviroment, productTypeFilter } from "../../constants";
 
 const ProductList = ({ products }) => {
   const [allProducts, setAllProducts] = useState(products);
   const [filteredInfo, setFilteredInfo] = useState({});
   const [sortedInfo, setSortedInfo] = useState({});
+  const [searchValue, setSearchValue] = useState("");
 
   const changeHandler = (pagination, filters, sorter) => {
     setFilteredInfo(filters);
@@ -130,6 +131,21 @@ const ProductList = ({ products }) => {
     <div>
       <div>
         <p>List of All Products</p>
+        <Space style={{ marginBottom: 16, marginRight: 14 }} wrap>
+          <Input
+            placeholder="Search Product Name"
+            value={searchValue}
+            onChange={(e) => {
+              const currentValue = e.target.value;
+              setSearchValue(currentValue);
+              const filteredData = products.filter((entry) => {
+                const regex = new RegExp(`${currentValue}.*`, "gi");
+                return entry.product_name.match(regex);
+              });
+              setAllProducts(filteredData);
+            }}
+          />
+        </Space>
         <Space style={{ marginBottom: 16 }} wrap>
           <Button onClick={setNameSort}>Sort By Product Name</Button>
           <Button onClick={clearFilters}>Clear filters</Button>
