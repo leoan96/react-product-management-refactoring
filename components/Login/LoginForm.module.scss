@@ -1,15 +1,17 @@
-.login_title {
-  margin-top: 100px;
-  margin-left: 150px;
-}
-
 .login_input {
-  max-width: 350px;
+  width: 18rem;
+  max-width: 30rem;
 }
 
 .btn_style {
   font-size: 15px;
-  border-radius: 20px;
+  border-radius: 10px;
+  width: 90%;
+  margin-left: 5%;
+}
+
+.btn_style:hover {
+  transform: scale(1.2);
 }
 
 @media (max-width: 600px) {
@@ -23,7 +25,8 @@
 
   .login_label {
     display: block;
-    margin-left: 150px;
+    align-self: center;
+    justify-self: center;
   }
 
   .login_input {

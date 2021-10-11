@@ -1,7 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@1,300&display=swap");
+
+.login {
+}
+
 .container {
-  max-width: 80%;
-  margin: 4rem auto 2rem auto;
-  padding: 1rem;
+  max-width: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 7rem auto;
+  // padding: 1rem;
   // :global {
   //   .ant-btn {
   //     background-color: green;
@@ -11,6 +20,30 @@
 }
 
 .title {
-  padding: 1.4rem;
-  margin-left: 17%;
+  font-size: 3rem;
+  font-family: "Lato", sans-serif;
+}
+
+@keyframes slideInFromTop {
+  0% {
+    transform: translateY(-100%);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromBottom {
+  0% {
+    transform: translateY(100%);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.loginForm {
+  animation: slideInFromBottom 0.5s ease-in;
 }

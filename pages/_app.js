@@ -4,6 +4,7 @@ import { useRouter } from "next/dist/client/router";
 
 import Layout from "../components/layout/Layout";
 import CustomHead from "../components/CustomHead";
+import AuthContextProvider from "../context/auth/AuthContextProvider";
 
 const MyApp = ({ Component, pageProps }) => {
   const { asPath } = useRouter();
@@ -12,17 +13,21 @@ const MyApp = ({ Component, pageProps }) => {
   if (asPath === "/") {
     return (
       <>
-        {headTitle}
-        <Component {...pageProps} />
+        <AuthContextProvider>
+          {headTitle}
+          <Component {...pageProps} />
+        </AuthContextProvider>
       </>
     );
   }
 
   return (
-    <Layout>
-      {headTitle}
-      <Component {...pageProps} />
-    </Layout>
+    <AuthContextProvider>
+      <Layout asPath={asPath}>
+        {headTitle}
+        <Component {...pageProps} />
+      </Layout>
+    </AuthContextProvider>
   );
 };
 

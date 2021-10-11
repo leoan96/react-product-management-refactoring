@@ -3,19 +3,34 @@ import { Form, Input, Button } from "antd";
 import { useRouter } from "next/dist/client/router";
 
 import styles from "./LoginForm.module.scss";
+import { useAuthContext } from "../../context/context";
+import authConstants from "../../context/auth";
 
 const LoginForm = () => {
   const router = useRouter();
+  const authContext = useAuthContext();
 
   const validateAccount = (username, password) => {
     return username === "lizard" && password === "123" ? true : false;
   };
 
   const onFinishHandler = (values) => {
+    authContext.dispatch({ type: authConstants.REQUEST_LOGIN });
     const { username, password } = values;
     if (username && password && validateAccount(username, password)) {
+      const dataObject = {
+        user: "John Doe",
+        auth_token: "1i39rhf92be",
+      };
+      localStorage.setItem("currentUser", JSON.stringify(dataObject));
+      authContext.dispatch({
+        type: authConstants.LOGIN_SUCCESS,
+        payload: dataObject,
+      });
       router.push("/admin");
+      return;
     }
+    authContext.dispatch({ type: authConstants.LOGIN_ERROR });
     console.log("Wrong credentials!");
   };
 
@@ -26,12 +41,6 @@ const LoginForm = () => {
   return (
     <Form
       name="basic"
-      labelCol={{
-        span: 8,
-      }}
-      wrapperCol={{
-        span: 16,
-      }}
       initialValues={{
         remember: true,
       }}
@@ -50,8 +59,6 @@ const LoginForm = () => {
             message: "Please input your username!",
           },
           {
-            type: "enum",
-            enum: ["lizard"],
             message: "Wrong username!",
           },
         ]}
@@ -73,23 +80,9 @@ const LoginForm = () => {
         <Input.Password className={styles.login_input} />
       </Form.Item>
 
-      <Form.Item
-        name="remember"
-        valuePropName="checked"
-        wrapperCol={{
-          offset: 8,
-          span: 16,
-        }}
-      ></Form.Item>
-
-      <Form.Item
-        wrapperCol={{
-          offset: 7,
-          span: 16,
-        }}
-      >
+      <Form.Item>
         <Button className={styles.btn_style} type="primary" htmlType="submit">
-          Submit
+          Log In
         </Button>
       </Form.Item>
     </Form>
