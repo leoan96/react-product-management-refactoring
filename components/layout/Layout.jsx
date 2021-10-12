@@ -5,8 +5,6 @@ import MainNavigation from "./MainNavigation";
 
 const Layout = ({ children, asPath }) => {
   const authContext = useAuthContext();
-  console.log("Layout: ", asPath);
-  console.log(authContext);
 
   const router = useRouter();
 
@@ -37,7 +35,7 @@ const Layout = ({ children, asPath }) => {
   }
 
   return (
-    <header>
+    <header style={{ maxWidth: "90%", margin: "0 auto" }}>
       <MainNavigation />
       {children}
     </header>

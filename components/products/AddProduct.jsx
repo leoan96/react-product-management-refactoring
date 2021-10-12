@@ -13,15 +13,6 @@ const AddProduct = () => {
     setIsModalVisible(false);
   }
 
-  const layout = {
-    labelCol: {
-      span: 8,
-    },
-    wrapperCol: {
-      span: 16,
-    },
-  };
-
   const validateMessages = {
     required: "${label} is required!",
     types: {
@@ -76,7 +67,9 @@ const AddProduct = () => {
         message="Successfully Added Product"
       />
       <Form
-        {...layout}
+        style={{
+          maxWidth: "50%",
+        }}
         ref={form}
         name="addProductForm"
         onFinish={finishHandler}
@@ -117,11 +110,12 @@ const AddProduct = () => {
             <Select.Option value="food">Food</Select.Option>
           </Select>
         </Form.Item>
-        {/* <Form.Item name="publish" valuePropName="checked" noStyle>
-        <Checkbox>Published</Checkbox>
-      </Form.Item> */}
-        <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-          <Button type="primary" htmlType="submit">
+        <Form.Item>
+          <Button
+            type="primary"
+            htmlType="submit"
+            style={{ "border-radius": "10px" }}
+          >
             Add Product
           </Button>
         </Form.Item>

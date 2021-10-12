@@ -129,35 +129,33 @@ const ProductList = ({ products }) => {
 
   return (
     <div>
-      <div>
-        <p>List of All Products</p>
-        <Space style={{ marginBottom: 16, marginRight: 14 }} wrap>
-          <Input
-            placeholder="Search Product Name"
-            value={searchValue}
-            onChange={(e) => {
-              const currentValue = e.target.value;
-              setSearchValue(currentValue);
-              const filteredData = products.filter((entry) => {
-                const regex = new RegExp(`${currentValue}.*`, "gi");
-                return entry.product_name.match(regex);
-              });
-              setAllProducts(filteredData);
-            }}
-          />
-        </Space>
-        <Space style={{ marginBottom: 16 }} wrap>
-          <Button onClick={setNameSort}>Sort By Product Name</Button>
-          <Button onClick={clearFilters}>Clear filters</Button>
-          <Button onClick={clearAll}>Clear filters and sorters</Button>
-        </Space>
-        <Table
-          columns={columns}
-          dataSource={allProducts}
-          onChange={changeHandler}
-          rowKey="product_code"
+      <h2>List of All Products</h2>
+      <Space style={{ marginBottom: 16, marginRight: 14 }} wrap>
+        <Input
+          placeholder="Search Product Name"
+          value={searchValue}
+          onChange={(e) => {
+            const currentValue = e.target.value;
+            setSearchValue(currentValue);
+            const filteredData = products.filter((entry) => {
+              const regex = new RegExp(`${currentValue}.*`, "gi");
+              return entry.product_name.match(regex);
+            });
+            setAllProducts(filteredData);
+          }}
         />
-      </div>
+      </Space>
+      <Space style={{ marginBottom: 16 }} wrap>
+        <Button onClick={setNameSort}>Sort By Product Name</Button>
+        <Button onClick={clearFilters}>Clear filters</Button>
+        <Button onClick={clearAll}>Clear filters and sorters</Button>
+      </Space>
+      <Table
+        columns={columns}
+        dataSource={allProducts}
+        onChange={changeHandler}
+        rowKey="product_code"
+      />
     </div>
   );
 };
