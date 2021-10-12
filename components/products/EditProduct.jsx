@@ -47,15 +47,6 @@ const EditProduct = (props) => {
     getProductDetails();
   }, [router.isReady, router.query.product_code]);
 
-  const layout = {
-    labelCol: {
-      span: 8,
-    },
-    wrapperCol: {
-      span: 16,
-    },
-  };
-
   const validateMessages = {
     required: "${label} is required!",
     types: {
@@ -136,7 +127,6 @@ const EditProduct = (props) => {
         message="Successfully Edited Product"
       />
       <Form
-        {...layout}
         name="Editm"
         onFinish={finishHandler}
         validateMessages={validateMessages}
@@ -146,6 +136,9 @@ const EditProduct = (props) => {
           { name: "product_type", value: productType },
           { name: "datePicker", value: moment(datePicker) },
         ]}
+        style={{
+          maxWidth: "50%",
+        }}
       >
         <Form.Item
           name="product_name"
@@ -186,8 +179,12 @@ const EditProduct = (props) => {
             <Select.Option value="food">Food</Select.Option>
           </Select>
         </Form.Item>
-        <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-          <Button type="primary" htmlType="submit">
+        <Form.Item>
+          <Button
+            type="primary"
+            htmlType="submit"
+            style={{ "border-radius": "10px" }}
+          >
             Edit Product
           </Button>
         </Form.Item>
