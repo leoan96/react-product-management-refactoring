@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Input, Button } from "antd";
 import { useRouter } from "next/dist/client/router";
 
@@ -9,6 +9,7 @@ import authConstants from "../../context/auth";
 const LoginForm = () => {
   const router = useRouter();
   const authContext = useAuthContext();
+  const [loading, setIsloading] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -31,21 +32,39 @@ const LoginForm = () => {
   };
 
   const onFinishHandler = (values) => {
+    setIsloading(true);
     authContext.dispatch({ type: authConstants.REQUEST_LOGIN });
     const { username, password } = values;
-    if (username && password && validateAccount(username, password)) {
-      const dataObject = {
-        user: "John Doe",
-        auth_token: "1i39rhf92be",
-      };
-      localStorage.setItem("currentUser", JSON.stringify(dataObject));
-      authContext.dispatch({
-        type: authConstants.LOGIN_SUCCESS,
-        payload: dataObject,
-      });
-      router.push("/admin");
-      return;
-    }
+    setTimeout(() => {
+      if (username && password && validateAccount(username, password)) {
+        const dataObject = {
+          user: "John Doe",
+          auth_token: "1i39rhf92be",
+        };
+        localStorage.setItem("currentUser", JSON.stringify(dataObject));
+        authContext.dispatch({
+          type: authConstants.LOGIN_SUCCESS,
+          payload: dataObject,
+        });
+        setIsloading(false);
+        router.push("/admin");
+        return;
+      }
+    }, 4000);
+    // if (username && password && validateAccount(username, password)) {
+    //   const dataObject = {
+    //     user: "John Doe",
+    //     auth_token: "1i39rhf92be",
+    //   };
+    //   localStorage.setItem("currentUser", JSON.stringify(dataObject));
+    //   authContext.dispatch({
+    //     type: authConstants.LOGIN_SUCCESS,
+    //     payload: dataObject,
+    //   });
+    //   setIsloading(false);
+    //   router.push("/admin");
+    //   return;
+    // }
     authContext.dispatch({ type: authConstants.LOGIN_ERROR });
     console.log("Wrong credentials!");
   };
@@ -97,7 +116,12 @@ const LoginForm = () => {
       </Form.Item>
 
       <Form.Item>
-        <Button className={styles.btn_style} type="primary" htmlType="submit">
+        <Button
+          className={styles.btn_style}
+          type="primary"
+          htmlType="submit"
+          loading={loading}
+        >
           Log In
         </Button>
       </Form.Item>
