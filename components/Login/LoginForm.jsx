@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Form, Input, Button } from "antd";
 import { useRouter } from "next/dist/client/router";
 
@@ -9,6 +9,22 @@ import authConstants from "../../context/auth";
 const LoginForm = () => {
   const router = useRouter();
   const authContext = useAuthContext();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      if (!router.isReady) return;
+      if (authContext.user || authContext.token) {
+        router.push("/admin");
+      }
+    };
+    checkAuth();
+  }, [
+    router.isReady,
+    router,
+    authContext.user,
+    authContext.token,
+    authContext,
+  ]);
 
   const validateAccount = (username, password) => {
     return username === "lizard" && password === "123" ? true : false;
