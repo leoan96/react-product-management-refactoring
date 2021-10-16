@@ -3,7 +3,8 @@ import authConstants from ".";
 export const initialState = {
   user: "",
   token: "",
-  loading: false,
+  loading: true,
+  isFetchingUser: true,
   errorMessage: null,
 };
 
@@ -20,6 +21,7 @@ export const authReducer = (state, action) => {
         user: action.payload.user,
         token: action.payload.auth_token,
         loading: false,
+        isFetchingUser: false,
       };
     case authConstants.LOGOUT:
       return {
@@ -31,16 +33,21 @@ export const authReducer = (state, action) => {
       return {
         ...state,
         loading: false,
+        isFetchingUser: false,
         errorMessage: action.error,
       };
     case authConstants.SET_USER:
       return {
         ...state,
+        loading: false,
+        isFetchingUser: false,
         user: action.payload.user,
       };
     case authConstants.SET_TOKEN:
       return {
         ...state,
+        loading: false,
+        isFetchingUser: false,
         token: action.payload.token,
       };
     default:

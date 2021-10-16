@@ -68,7 +68,7 @@ const AddProduct = () => {
       />
       <Form
         style={{
-          maxWidth: "50%",
+          maxWidth: "40%",
         }}
         ref={form}
         name="addProductForm"

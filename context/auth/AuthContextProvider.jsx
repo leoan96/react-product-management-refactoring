@@ -18,6 +18,8 @@ const AuthContextProvider = ({ children }) => {
       if (user && token) {
         dispatch({ type: authConstants.SET_USER, payload: { user } });
         dispatch({ type: authConstants.SET_TOKEN, payload: { token } });
+      } else {
+        dispatch({ type: authConstants.LOGIN_ERROR });
       }
     } catch (err) {
       console.log(err);

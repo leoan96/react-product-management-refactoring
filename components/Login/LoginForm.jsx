@@ -1,20 +1,36 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Input, Button } from "antd";
 import { useRouter } from "next/dist/client/router";
 
 import styles from "./LoginForm.module.scss";
 import { useAuthContext } from "../../context/context";
 import authConstants from "../../context/auth";
+import Loading from "../Loading";
 
 const LoginForm = () => {
   const router = useRouter();
   const authContext = useAuthContext();
+  const [loading, setIsloading] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      if (!router.isReady) return;
+      if (
+        (authContext.user || authContext.token) &&
+        !authContext.isFetchingUser
+      ) {
+        router.push("/admin");
+      }
+    };
+    checkAuth();
+  }, [router.isReady, router, authContext]);
 
   const validateAccount = (username, password) => {
     return username === "lizard" && password === "123" ? true : false;
   };
 
   const onFinishHandler = (values) => {
+    setIsloading(true);
     authContext.dispatch({ type: authConstants.REQUEST_LOGIN });
     const { username, password } = values;
     if (username && password && validateAccount(username, password)) {
@@ -27,10 +43,12 @@ const LoginForm = () => {
         type: authConstants.LOGIN_SUCCESS,
         payload: dataObject,
       });
+      setIsloading(false);
       router.push("/admin");
       return;
     }
     authContext.dispatch({ type: authConstants.LOGIN_ERROR });
+    setIsloading(false);
     console.log("Wrong credentials!");
   };
 
@@ -38,7 +56,7 @@ const LoginForm = () => {
     console.log("Failed:", errorInfo);
   };
 
-  return (
+  return !authContext.user && !authContext.isFetchingUser ? (
     <Form
       name="basic"
       initialValues={{
@@ -81,11 +99,18 @@ const LoginForm = () => {
       </Form.Item>
 
       <Form.Item>
-        <Button className={styles.btn_style} type="primary" htmlType="submit">
+        <Button
+          className={styles.btn_style}
+          type="primary"
+          htmlType="submit"
+          loading={loading}
+        >
           Log In
         </Button>
       </Form.Item>
     </Form>
+  ) : (
+    <Loading />
   );
 };
 
