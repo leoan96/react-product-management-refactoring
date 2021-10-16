@@ -5,6 +5,7 @@ import { useRouter } from "next/dist/client/router";
 import styles from "./LoginForm.module.scss";
 import { useAuthContext } from "../../context/context";
 import authConstants from "../../context/auth";
+import Loading from "../Loading";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -14,18 +15,15 @@ const LoginForm = () => {
   useEffect(() => {
     const checkAuth = async () => {
       if (!router.isReady) return;
-      if (authContext.user || authContext.token) {
+      if (
+        (authContext.user || authContext.token) &&
+        !authContext.isFetchingUser
+      ) {
         router.push("/admin");
       }
     };
     checkAuth();
-  }, [
-    router.isReady,
-    router,
-    authContext.user,
-    authContext.token,
-    authContext,
-  ]);
+  }, [router.isReady, router, authContext]);
 
   const validateAccount = (username, password) => {
     return username === "lizard" && password === "123" ? true : false;
@@ -35,37 +33,22 @@ const LoginForm = () => {
     setIsloading(true);
     authContext.dispatch({ type: authConstants.REQUEST_LOGIN });
     const { username, password } = values;
-    setTimeout(() => {
-      if (username && password && validateAccount(username, password)) {
-        const dataObject = {
-          user: "John Doe",
-          auth_token: "1i39rhf92be",
-        };
-        localStorage.setItem("currentUser", JSON.stringify(dataObject));
-        authContext.dispatch({
-          type: authConstants.LOGIN_SUCCESS,
-          payload: dataObject,
-        });
-        setIsloading(false);
-        router.push("/admin");
-        return;
-      }
-    }, 4000);
-    // if (username && password && validateAccount(username, password)) {
-    //   const dataObject = {
-    //     user: "John Doe",
-    //     auth_token: "1i39rhf92be",
-    //   };
-    //   localStorage.setItem("currentUser", JSON.stringify(dataObject));
-    //   authContext.dispatch({
-    //     type: authConstants.LOGIN_SUCCESS,
-    //     payload: dataObject,
-    //   });
-    //   setIsloading(false);
-    //   router.push("/admin");
-    //   return;
-    // }
+    if (username && password && validateAccount(username, password)) {
+      const dataObject = {
+        user: "John Doe",
+        auth_token: "1i39rhf92be",
+      };
+      localStorage.setItem("currentUser", JSON.stringify(dataObject));
+      authContext.dispatch({
+        type: authConstants.LOGIN_SUCCESS,
+        payload: dataObject,
+      });
+      setIsloading(false);
+      router.push("/admin");
+      return;
+    }
     authContext.dispatch({ type: authConstants.LOGIN_ERROR });
+    setIsloading(false);
     console.log("Wrong credentials!");
   };
 
@@ -73,7 +56,7 @@ const LoginForm = () => {
     console.log("Failed:", errorInfo);
   };
 
-  return (
+  return !authContext.user && !authContext.isFetchingUser ? (
     <Form
       name="basic"
       initialValues={{
@@ -126,6 +109,8 @@ const LoginForm = () => {
         </Button>
       </Form.Item>
     </Form>
+  ) : (
+    <Loading />
   );
 };
 
