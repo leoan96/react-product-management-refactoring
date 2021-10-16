@@ -6,30 +6,30 @@ const Loading = ({ text }) => {
   const antIcon = (
     <LoadingOutlined
       style={{
-        color: "#FCEA25",
+        color: "#fee715ff",
         fontSize: "7rem",
-        // position: "absolute",
-        // top: "50%",
-        // left: `calc(50% - 20px)`,
       }}
       spin
     />
   );
 
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "column",
+      }}
+    >
       <Spin indicator={antIcon} />
       {text?.length > 0 ? (
         <div
-          style={
-            {
-              // color: "grey",
-              // fontSize: 18,
-              // position: "absolute",
-              // top: "60%",
-              // left: `calc(50vw - 95px)`,
-            }
-          }
+          style={{
+            color: "#101820ff",
+            fontSize: "1.5rem",
+            marginTop: "20%",
+          }}
         >
           {text}
         </div>
