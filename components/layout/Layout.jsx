@@ -29,10 +29,11 @@ const Layout = ({ children, asPath }) => {
   ) : (
     <div
       style={{
+        height: "90vh",
         display: "flex",
-        justifyContent: "center",
         alignItems: "center",
-        height: "100%",
+        justifyContent: "center",
+        flexDirection: "column",
       }}
     >
       <Loading text="Loading" />
